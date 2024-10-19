@@ -134,6 +134,23 @@ def get_user_guess():
 
     return False  
 
+def end_game(player_won):
+    """
+    Clears screen then displays defeated players board
+    and declares a winner. Use True argument for player win and
+    false for computer win
+    """
+    print("\033c", end = "")
+    if player_won:
+        computers_board.draw_self()
+        print (f"\nCongratulations {players_board.name}, you WON!\n")
+    else:
+        players_board.draw_self()
+        print (f"\nComputer wins this one.\n")
+
+    input("Press enter to exit...")
+    exit()
+
 #BASE CODE BEGINS HERE
 print("\033c", end = "")
 name = input("Your game tag:\n")
@@ -158,5 +175,10 @@ while(True):
     print("Where could the enemy battleship be?")
 
     if get_user_guess(): #if user guess is validated and not repeated continue with game
+        if not computers_board.battleships: #if player won the game
+            end_game(True)
+
         computer_guess()
-    
+
+        if not players_board.battleships: #if computer won the game
+            end_game(False)
