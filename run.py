@@ -185,6 +185,8 @@ def display_welcome_screen():
         "and in text below. Destroy computers battleships before yours\n"
         "are destroyed and win!\n"
         )
+    if game_message["player"]:
+        print (game_message["player"])
 
 def game_loop():
     """ Game loop - end_game() function exits"""
@@ -201,8 +203,14 @@ def game_loop():
                 end_game(False)
 
 #BASE CODE BEGINS HERE
-display_welcome_screen()
-name = input("Your game tag:\n")
+while(True):
+    display_welcome_screen()
+    name = input("Your game tag:\n")
+    if (len(name) > 12 or len(name) < 3):
+        game_message["player"] = "Game tag should be 3-12 characters"
+    else:
+        game_message["player"] = ""
+        break
 
 #declare player and computer board instances
 players_board = Board(5, name)
