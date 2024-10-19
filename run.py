@@ -161,8 +161,8 @@ def end_game(player_won):
         players_board.draw_self(False)
         print (f"\nComputer wins this one.\n")
 
-    input("Press enter to exit...")
-    exit()
+    input("Press enter to reset...")
+    main()
 
 def display_welcome_screen():
     """
@@ -202,18 +202,22 @@ def game_loop():
             if not players_board.battleships: #if computer won the game
                 end_game(False)
 
-#BASE CODE BEGINS HERE
-while(True):
-    display_welcome_screen()
-    name = input("Your game tag (3-12):\n")
-    if (len(name) > 12 or len(name) < 3):
-        game_message["player"] = "Game tag should be 3-12 characters long"
-    else:
-        game_message["player"] = ""
-        break
+def main():
+    while(True):
+        display_welcome_screen()
+        name = input("Your game tag (3-12):\n")
+        if (len(name) > 12 or len(name) < 3):
+            game_message["player"] = "Game tag should be 3-12 characters long"
+        else:
+            game_message["player"] = ""
+            break
 
-#declare player and computer board instances
-players_board = Board(5, name)
-computers_board = Board(5, "Computer")
+    global players_board
+    global computers_board
 
-game_loop()
+    players_board = Board(5, name)
+    computers_board = Board(5, "Computer")
+
+    game_loop()
+
+main()
