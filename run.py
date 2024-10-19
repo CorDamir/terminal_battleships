@@ -16,6 +16,9 @@ class Board():
             self.current_status.append(["*" for i in range(size)])
 
     def draw_self(self):
+        """
+        Draws a numbered grid representation of current board status
+        """
         for i in range(self.size + 1):
             print(f" {i} ", end = "")
         
@@ -35,6 +38,9 @@ class Board():
             y += 1
 
     def randomize_battleship_locations(self):
+        """
+        Puts battleships to random locations on board
+        """
         ships_left_to_assign = self.battleships
         
         while(ships_left_to_assign):
@@ -46,6 +52,9 @@ class Board():
                 ships_left_to_assign -= 1
 
 def draw_game_status():
+    """
+    Clears screen then draws player and computer boards on it
+    """
     print("\033c", end = "")
     players_board.draw_self()
     print()
@@ -66,7 +75,7 @@ def handle_user_guess(row, column):
             return True
 
         case "X" | "-":
-            game_message["player"] = f"You already hit ({row+1}, {column+1}) coordinates. Try again."
+            game_message["player"] = f"You already hit ({row+1}, {column+1}) coordinates. Try again.\n"
             game_message["computer"] = ""
             return False
         
@@ -76,6 +85,10 @@ def handle_user_guess(row, column):
             return True
 
 def computer_guess():
+    """
+    Makes a random non-repeated guess and adjusts the board
+    status accordingly
+    """
     while(True):
         row_guess = random.randint(0, computers_board.size - 1)
         column_guess = random.randint(0, computers_board.size - 1)
@@ -95,6 +108,32 @@ def computer_guess():
             case _:
                 pass
 
+def get_user_guess():
+    """
+    Gets user row and column input, validates input. Returns false on failed
+    validation otherwise returns 'handle_user_guess' function result
+    """
+    row_guess = input("Row:\n")
+    column_guess = input("Column:\n")
+
+    try: #convert user input to integers
+        row_guess = int(row_guess) - 1
+        column_guess = int(column_guess) - 1
+
+    except: #display try again message to player if not integers
+        game_message["player"] = "Row and Column must be single numbers. Try again.\n"
+        game_message["computer"] = ""
+
+    else:  #otherwise check if input is within board limits
+        if column_guess >= 0 and column_guess < players_board.size and row_guess >= 0 and row_guess < players_board.size:
+            #within limits: execute user input handling function
+            return handle_user_guess(row_guess, column_guess) #return handling functions result
+        else: #outside limits: display a try again message to user
+            game_message["player"] = "That hit would be outside the battlefield. Try again.\n"
+            game_message["computer"] = ""
+
+    return False  
+
 #BASE CODE BEGINS HERE
 print("\033c", end = "")
 name = input("Your game tag:\n")
@@ -106,6 +145,7 @@ players_board.randomize_battleship_locations()
 computers_board.randomize_battleship_locations()
 
 while(True):
+    """ Game loop """
     draw_game_status()
 
     print(f"{players_board.name}: {players_board.battleships}    Computer: {computers_board.battleships}\n")
@@ -116,11 +156,7 @@ while(True):
         print(f"{game_message["computer"]}\n")
 
     print("Where could the enemy battleship be?")
-    
-    row_guess = input("Row:\n")
-    column_guess = input("Column:\n")
-    
-    check_user = handle_user_guess(int(row_guess)-1, int(column_guess)-1)
-    
-    if(check_user):
+
+    if get_user_guess(): #if user guess is validated and not repeated continue with game
         computer_guess()
+    
