@@ -53,13 +53,20 @@ class Board():
 
 def draw_game_status():
     """
-    Clears screen then draws player and computer boards on it
+    Clears screen then draws player and computer boards
+    and displays score
     """
     print("\033c", end = "")
     players_board.draw_self()
     print()
     computers_board.draw_self()
     print()
+    print(f"{players_board.name}: {players_board.battleships}    Computer: {computers_board.battleships}\n")
+
+    if game_message["player"]:
+        print(f"{game_message["player"]}")
+    if game_message["computer"]:
+        print(f"{game_message["computer"]}\n")
 
 def handle_user_guess(row, column):
     """
@@ -173,34 +180,28 @@ def display_welcome_screen():
         "are destroyed and win!\n"
         )
 
+def game_loop():
+    """ Game loop - end_game() function exits"""
+    while(True):
+        draw_game_status()
+
+        if get_user_guess(): #if user guess is validated and not repeated continue with game
+            if not computers_board.battleships: #if player won the game
+                end_game(True)
+
+            computer_guess()
+
+            if not players_board.battleships: #if computer won the game
+                end_game(False)
+
 #BASE CODE BEGINS HERE
 display_welcome_screen()
 name = input("Your game tag:\n")
 
+#declare player and computer board instances and call random setup
 players_board = Board(5, name)
 computers_board = Board(5, "Computer")
-
 players_board.randomize_battleship_locations()
 computers_board.randomize_battleship_locations()
 
-while(True):
-    """ Game loop """
-    draw_game_status()
-
-    print(f"{players_board.name}: {players_board.battleships}    Computer: {computers_board.battleships}\n")
-
-    if game_message["player"]:
-        print(f"{game_message["player"]}")
-    if game_message["computer"]:
-        print(f"{game_message["computer"]}\n")
-
-    print("Where could the enemy battleship be?")
-
-    if get_user_guess(): #if user guess is validated and not repeated continue with game
-        if not computers_board.battleships: #if player won the game
-            end_game(True)
-
-        computer_guess()
-
-        if not players_board.battleships: #if computer won the game
-            end_game(False)
+game_loop()
