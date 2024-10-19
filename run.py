@@ -15,6 +15,8 @@ class Board():
         for row in range(size):
             self.current_status.append(["*" for i in range(size)])
 
+        self.randomize_battleship_locations()
+
     def draw_self(self):
         """
         Draws a numbered grid representation of current board status
@@ -104,7 +106,7 @@ def computer_guess():
             case "O":
                 players_board.current_status[row_guess][column_guess] = "X"
                 players_board.battleships -= 1
-                game_message["computer"] = f"Computer destroyed your battleship at ({row_guess}, {column_guess}) coordinates!"
+                game_message["computer"] = f"Computer destroyed your battleship at ({row_guess + 1}, {column_guess + 1}) coordinates!"
                 return
 
             case "*":
@@ -198,10 +200,8 @@ def game_loop():
 display_welcome_screen()
 name = input("Your game tag:\n")
 
-#declare player and computer board instances and call random setup
+#declare player and computer board instances
 players_board = Board(5, name)
 computers_board = Board(5, "Computer")
-players_board.randomize_battleship_locations()
-computers_board.randomize_battleship_locations()
 
 game_loop()
