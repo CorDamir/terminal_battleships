@@ -46,17 +46,17 @@ class Board():
                 ships_left_to_assign -= 1
 
 def draw_game_status():
-    print("\033c")
+    print("\033c", end = "")
     players_board.draw_self()
     print()
     computers_board.draw_self()
     print()
 
 def handle_user_guess(row, column):
-
     match computers_board.current_status[row][column]:
         case "O":
             computers_board.current_status[row][column] = "X"
+            computers_board.battleships -= 1
             game_message["player"] = f"You destroyed enemy battleship at ({row+1}, {column+1}) coordinates!"
             return True
 
@@ -66,14 +66,35 @@ def handle_user_guess(row, column):
         
         case "*":
             computers_board.current_status[row][column] = "-"
-            game_message["player"] = f"No enemy battleships on ({row+1}, {column+1}) coordinates. A miss!"
+            game_message["player"] = f"No enemy battleships at ({row+1}, {column+1}) coordinates. A miss!"
             return True
 
+def computer_guess():
+    while(True):
+        row_guess = random.randint(0, computers_board.size - 1)
+        column_guess = random.randint(0, computers_board.size - 1)
+
+        match players_board.current_status[row_guess][column_guess]:
+            case "O":
+                players_board.current_status[row_guess][column_guess] = "X"
+                players_board.battleships -= 1
+                game_message["computer"] = f"Computer destroyed your battleship at ({row_guess}, {column_guess}) coordinates!"
+                return
+
+            case "*":
+                players_board.current_status[row_guess][column_guess] = "-"
+                game_message["computer"] = f"Computer missed at ({row_guess + 1}, {column_guess + 1}) coordinates!"
+                return
+
+            case _:
+                pass
+
 #BASE CODE BEGINS HERE
+print("\033c", end = "")
 name = input("Your game tag:\n")
 
-players_board = Board(7, name)
-computers_board = Board(7, "Computer")
+players_board = Board(5, name)
+computers_board = Board(5, "Computer")
 
 players_board.randomize_battleship_locations()
 computers_board.randomize_battleship_locations()
@@ -84,7 +105,7 @@ while(True):
     print(f"Remaining battleships for {players_board.name}: {players_board.battleships}")
     print(f"Remaining battleships for Computer: {computers_board.battleships}\n")
 
-    print(f"{game_message["player"]}\n")
+    print(f"{game_message["player"]}")
     print(f"{game_message["computer"]}\n")
 
     print("Where could the enemy battleship be?")
@@ -92,3 +113,5 @@ while(True):
     row_guess = input("Row:\n")
     column_guess = input("Column:\n")
     handle_user_guess(int(row_guess)-1, int(column_guess)-1)
+
+    computer_guess()
