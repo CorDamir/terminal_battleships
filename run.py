@@ -205,9 +205,9 @@ def game_loop():
 #BASE CODE BEGINS HERE
 while(True):
     display_welcome_screen()
-    name = input("Your game tag:\n")
+    name = input("Your game tag (3-12):\n")
     if (len(name) > 12 or len(name) < 3):
-        game_message["player"] = "Game tag should be 3-12 characters"
+        game_message["player"] = "Game tag should be 3-12 characters long"
     else:
         game_message["player"] = ""
         break
