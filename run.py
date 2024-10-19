@@ -53,6 +53,11 @@ def draw_game_status():
     print()
 
 def handle_user_guess(row, column):
+    """
+    Determines the outcome of user guess and changes current state of board
+    accordingly. Sets an appropriate game message and score. Returns false
+    if player input was a repeated guess
+    """
     match computers_board.current_status[row][column]:
         case "O":
             computers_board.current_status[row][column] = "X"
@@ -62,6 +67,7 @@ def handle_user_guess(row, column):
 
         case "X" | "-":
             game_message["player"] = f"You already hit ({row+1}, {column+1}) coordinates. Try again."
+            game_message["computer"] = ""
             return False
         
         case "*":
@@ -102,16 +108,19 @@ computers_board.randomize_battleship_locations()
 while(True):
     draw_game_status()
 
-    print(f"Remaining battleships for {players_board.name}: {players_board.battleships}")
-    print(f"Remaining battleships for Computer: {computers_board.battleships}\n")
+    print(f"{players_board.name}: {players_board.battleships}    Computer: {computers_board.battleships}\n")
 
-    print(f"{game_message["player"]}")
-    print(f"{game_message["computer"]}\n")
+    if game_message["player"]:
+        print(f"{game_message["player"]}")
+    if game_message["computer"]:
+        print(f"{game_message["computer"]}\n")
 
     print("Where could the enemy battleship be?")
     
     row_guess = input("Row:\n")
     column_guess = input("Column:\n")
-    handle_user_guess(int(row_guess)-1, int(column_guess)-1)
-
-    computer_guess()
+    
+    check_user = handle_user_guess(int(row_guess)-1, int(column_guess)-1)
+    
+    if(check_user):
+        computer_guess()
