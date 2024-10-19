@@ -151,8 +151,30 @@ def end_game(player_won):
     input("Press enter to exit...")
     exit()
 
+def display_welcome_screen():
+    """
+    Displays simple instructons before 
+    the game start
+    """
+    print("\033c", end = "")
+    print(
+        "\tWelcome to Battleships game!\n\n" 
+        "After you enter your game tag, your battle board will be\n"
+        "displayed first and computers second with following logic:\n\n"
+        "'*' - unchecked field\n"
+        "'O' - field with your battleship\n"
+        "'X' - field with a destroyed battleship\n"
+        "'-' - checked empty field\n\n"
+        "Below the battle boards you will see remaining battleships\n"
+        "for yourself and computer.\n\n"
+        "Enter numbers of row and column for the field you wish to\n"
+        "check and the result will be displayed both on the battlefield\n"
+        "and in text below. Destroy computers battleships before yours\n"
+        "are destroyed and win!\n"
+        )
+
 #BASE CODE BEGINS HERE
-print("\033c", end = "")
+display_welcome_screen()
 name = input("Your game tag:\n")
 
 players_board = Board(5, name)
