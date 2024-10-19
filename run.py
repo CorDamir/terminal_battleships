@@ -17,9 +17,10 @@ class Board():
 
         self.randomize_battleship_locations()
 
-    def draw_self(self):
+    def draw_self(self, hidden):
         """
         Draws a numbered grid representation of current board status
+        With argument true hides battleship locations
         """
         for i in range(self.size + 1):
             print(f" {i} ", end = "")
@@ -35,7 +36,10 @@ class Board():
         for row in self.current_status:
             print(f" {y}|", end = "")
             for field in row:
-                print(f" {field} ", end="")
+                if hidden and field == "O":
+                    print(f" * ", end = "")
+                else:
+                    print(f" {field} ", end = "")
             print()
             y += 1
 
@@ -59,9 +63,9 @@ def draw_game_status():
     and displays score
     """
     print("\033c", end = "")
-    players_board.draw_self()
+    players_board.draw_self(False)
     print()
-    computers_board.draw_self()
+    computers_board.draw_self(True)
     print()
     print(f"{players_board.name}: {players_board.battleships}    Computer: {computers_board.battleships}\n")
 
@@ -151,10 +155,10 @@ def end_game(player_won):
     """
     print("\033c", end = "")
     if player_won:
-        computers_board.draw_self()
+        computers_board.draw_self(False)
         print (f"\nCongratulations {players_board.name}, you WON!\n")
     else:
-        players_board.draw_self()
+        players_board.draw_self(False)
         print (f"\nComputer wins this one.\n")
 
     input("Press enter to exit...")
