@@ -1,14 +1,19 @@
+"""Module for generating random numbers"""
 import random
 
 
 class Board():
+    """
+    Contains player name, field size, battleship number
+    and status of all fields.
+    """
     def __init__(self, size, player):
         self.size = size
         self.battleships = int(size * size / 5)
         self.name = player
         self.current_status = []
 
-        for row in range(size):
+        for _ in range(size):
             self.current_status.append(["*" for i in range(size)])
 
         self.randomize_battleship_locations()
@@ -33,7 +38,7 @@ class Board():
             print(f" {y}|", end="")
             for field in row:
                 if hidden and field == "O":
-                    print(f" * ", end="")
+                    print(" * ", end="")
                 else:
                     print(f" {field} ", end="")
             print()
@@ -45,7 +50,7 @@ class Board():
         """
         ships_left_to_assign = self.battleships
 
-        while (ships_left_to_assign):
+        while ships_left_to_assign:
             row = random.randint(0, self.size - 1)
             column = random.randint(0, self.size - 1)
 
@@ -108,7 +113,7 @@ def computer_guess():
     Makes a random non-repeated guess and adjusts the board
     status accordingly
     """
-    while (True):
+    while True:
         row_guess = random.randint(0, computers_board.size - 1)
         column_guess = random.randint(0, computers_board.size - 1)
 
@@ -159,20 +164,18 @@ def get_user_guess():
     else:
         # otherwise check if input is within board limits
         if (
-          column_guess >= 0 and
-          column_guess < players_board.size and
-          row_guess >= 0 and
-          row_guess < players_board.size
+          0 <= column_guess < players_board.size and
+          0 <= row_guess < players_board.size
           ):
             # within limits: execute user input handling function
             return handle_user_guess(row_guess, column_guess)
 
-        else:
-            # outside limits: display a try again message to user
-            game_message["player"] = (
-                "That hit would be outside the battlefield. Try again.\n"
-                )
-            game_message["computer"] = ""
+        # outside limits: display a try again message to user
+        game_message["player"] = (
+            "That hit would be outside the battlefield. Try again.\n"
+            )
+        game_message["computer"] = ""
+
     # if user input not validated return false to loop user input
     return False
 
@@ -189,7 +192,7 @@ def end_game(player_won):
         print(f"\nCongratulations {players_board.name}, you WON!\n")
     else:
         players_board.draw_self(False)
-        print(f"\nComputer wins this one.\n")
+        print("\nComputer wins this one.\n")
 
     input("Press enter to reset...")
     main()
@@ -225,7 +228,7 @@ def display_welcome_screen():
 
 def game_loop():
     """Game loop"""
-    while (True):
+    while True:
         draw_game_status()
 
         if get_user_guess():
@@ -242,6 +245,9 @@ def game_loop():
 
 
 def main():
+    """
+    Sets initial values, gets user tag and calls game loop
+    """
     global players_board
     global computers_board
     global game_message
@@ -250,8 +256,8 @@ def main():
         "computer": "",
         "player": "",
     }
-    
-    while (True):
+
+    while True:
         display_welcome_screen()
         name = input("Your game tag (3-12):\n")
 
