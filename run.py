@@ -206,7 +206,7 @@ def display_welcome_screen():
     the game start
     """
     print("\033c", end="")
-    
+
     print(
         "\tWelcome to Battleships game!\n\n"
         "After you enter your game tag, your battle board will be\n"
@@ -223,7 +223,7 @@ def display_welcome_screen():
         "are destroyed and win!\n\n"
         "Ctrl+c if you wish to stop game.\n"
         )
-    
+
     if game_message["player"]:
         print(game_message["player"])
 
@@ -250,7 +250,7 @@ def main():
     while (True):
         display_welcome_screen()
         name = input("Your game tag (3-12):\n")
-        
+
         if (len(name) > 12 or len(name) < 3):
             game_message["player"] = "Game tag should be 3-12 characters long"
         else:
