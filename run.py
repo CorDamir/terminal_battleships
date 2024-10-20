@@ -1,10 +1,5 @@
 import random
 
-game_message = {
-    "computer": "",
-    "player": "",
-    }
-
 
 class Board():
     def __init__(self, size, player):
@@ -247,6 +242,15 @@ def game_loop():
 
 
 def main():
+    global players_board
+    global computers_board
+    global game_message
+
+    game_message = {
+        "computer": "",
+        "player": "",
+    }
+    
     while (True):
         display_welcome_screen()
         name = input("Your game tag (3-12):\n")
@@ -256,9 +260,6 @@ def main():
         else:
             game_message["player"] = ""
             break
-
-    global players_board
-    global computers_board
 
     players_board = Board(5, name)
     computers_board = Board(5, "Computer")
